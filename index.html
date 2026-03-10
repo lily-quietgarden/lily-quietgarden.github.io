@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel&family=Cormorant&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet">
+
+<title>Dear Lily,</title>
+
+<style>
+
+body{
+  margin:0;
+  background: linear-gradient(180deg,#f7e4de,#e8c7be);
+  font-family:'Cormorant', serif;
+  color:#5f5555;
+  overflow:hidden;
+}
+
+.wrapper{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  padding-top:60px;
+}
+
+.frame{
+  width:600px;
+  height:350px;
+  padding:20px;
+
+  border-radius:16px;
+  background: rgba(255,255,255,0.5);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  overflow-y:auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.tabs{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  margin-bottom:20px;
+}
+
+.tab{
+  background:transparent;
+  border:none;
+  font-family:'Cinzel', serif;
+  letter-spacing:0.1em;
+  color:#7a5c5c;
+  cursor:pointer;
+  padding:6px 12px;
+
+  position:relative;
+  transition:0.4s;
+}
+
+.tab::after{
+  content:"";
+  position:absolute;
+  left:50%;
+  bottom:-3px;
+  width:0;
+  height:1px;
+  background:#cdb3b3;
+  transform:translateX(-50%);
+  transition:0.4s;
+}
+
+.tab:hover::after{
+  width:100%;
+}
+
+.tab.active{
+  color:#a98d8d;
+  text-shadow:0 0 6px rgba(205,179,179,0.6);
+}
+
+.tab.active::before{
+  content:"✧";
+  position:absolute;
+  left:50%;
+  top:-8px;
+  transform:translateX(-50%);
+  color:#cdb3b3;
+  font-size:10px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+h1{
+  text-align:center;
+  letter-spacing:0.1em;
+  font-weight:500;
+  font-family:'Cinzel', serif;
+  color:#7a5c5c;
+  font-size:24px;
+}
+
+#page-title{
+  font-family:'Sacramento', cursive;
+  letter-spacing:0.12em;
+  opacity:0.6;
+}
+
+h2{
+  letter-spacing:0.2em;
+  font-size:16px;
+}
+
+.top-content{
+  text-align:center;
+  padding-top:40px;
+  padding-bottom:40px;
+}
+
+.top-content h2{
+  font-family:'EB Garamond', serif;
+  letter-spacing:0.2em;
+  color:#7a5c5c;
+  font-weight:500;
+}
+
+.top-content h3{
+  font-family:'Sacramento', cursive;
+  letter-spacing:0.2em;
+  color:#7a5c5c;
+  opacity:0.8;
+  margin-top:40px;
+  margin-bottom:0;
+
+  display:;
+  align-items:;   /* ←縦中央 */
+  gap:8px;              /* ←文字との距離 */
+}
+
+.top-content h4{
+  font-family:'Cormorant', serif;
+  font-size:11px;
+  letter-spacing:0.15em;
+  opacity:0.6;
+
+  margin:14px 0 4px;
+}
+
+.link-list{
+  font-family:'Cormorant', serif;
+  text-align:left;
+  list-style:circle;
+  margin-left:40px;
+  line-height:1.8em;
+  font-size:14px;
+  letter-spacing:0.1em;
+}
+
+.link-list li{
+  color:#5f5555;
+  opacity:0.7;
+}
+
+.top-content p{
+  opacity:0.7;
+  line-height:1.4em;
+  letter-spacing:0.2em;
+  font-size:14px;
+}
+
+.top-image{
+  width:220px;
+  margin-bottom:0;
+  opacity:0.8;
+  text-align:center;
+}
+
+#top-page h2{
+  text-align:center;
+  font-size:14px;
+}
+
+.diary-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:24px;
+  justify-content:center;
+}
+
+.diary{
+  width:450px;
+  border-bottom:1px solid #d8c7c7;
+  padding-bottom:40px;
+  margin-bottom:20px;
+}
+
+.diary:last-child{
+  border-bottom:none;
+}
+
+.diary-content{
+  display:flex;
+  gap:24px;
+  align-items:center;
+}
+
+.diary img{
+  width:200px;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+
+.text{
+  line-height:2.0;
+}
+
+.text p{
+  letter-spacing:0.1em;
+  line-height:2.0em;
+  font-size:14px;
+
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(2.0em - 1px),
+    #e2d6d6 calc(2.0em - 1px),
+    #e2d6d6 calc(2.0em - 0.5px),
+    transparent calc(2.0em - 0.5px),
+    transparent 2.0em
+  );
+
+  margin:0 0 4px 0;
+}
+
+.list{
+  width:400px;
+  margin:0 auto;
+  padding:10px 20px;
+
+  font-size:14px;
+  letter-spacing:0.2em;
+}
+
+.list h2{
+  font-family:'Cinzel', serif;
+  letter-spacing:0.15em;
+  font-weight:500;
+  text-align:center;
+}
+
+.list ul{
+  list-style:none;
+  padding:0;
+  margin-top:16px;
+}
+
+.list li{
+  border-bottom:1px dotted #e2d6d6;
+  padding:8px 0;
+}
+
+.list li.kana{
+  border-bottom:none;   /* 下線消す */
+
+  list-style:none;
+  padding:0 8px 16px 8px;
+  margin-top:50px;
+  margin-bottom:0;
+
+  font-family:'Cinzel', serif;
+  font-size:12px;
+  letter-spacing:0.2em;
+
+  color:#9b8f8f;
+
+  background-image:url("2015102311292613.gif"); /* 背景画像 */
+  background-repeat:no-repeat;       /* 繰り返しなし */
+  background-position:left bottom;   /* 左中央に配置 */
+  background-size:34px;              /* 画像サイズ */
+}
+
+.list li.kana span{
+  display:inline-block;
+  transform:rotate(-8deg);
+}
+
+#story-page{
+  justify-content:center;
+  gap:20px;
+}
+
+#story-page .story h2{
+  font-family:'Cormorant', serif;
+  font-size:14px;
+  letter-spacing:0.1em;
+  text-align:left;
+  padding-bottom:20px;
+  margin-bottom:0;
+
+  position:relative;
+}
+
+#story-page .story h2::before{
+  content:"";
+  position:absolute;
+  left:-8px;
+  bottom:0;
+
+  width:180px;
+  height:30px;
+
+  background-image:url("20100625122122.gif");
+  background-repeat:no-repeat;
+  background-size:180px;
+
+  opacity:0.5;   /* ←ここで薄さ調整 */
+
+  pointer-events:none;
+}
+
+#story-page.active{
+  display:flex;
+}
+
+#story-page .timeline{
+  width:300px;
+  margin:0 auto;
+  background:;
+  padding: 20px;
+  overflow-y:auto;
+  height:200px;
+
+  -ms-overflow-style:none;  /* IE / Edge */
+  scrollbar-width:none;     /* Firefox */
+}
+
+#story-page .timeline::-webkit-scrollbar{
+  display:none;             /* Chrome / Safari */
+}
+
+#story-page .story{
+  border-left:2px solid #e2d6d6;
+  padding-left:22px;
+  margin-bottom:34px;
+  position:relative;
+}
+
+#story-page .story::before{
+  content:"";
+  width:8px;
+  height:8px;
+  background:#e2d6d6;
+  border-radius:50%;
+  position:absolute;
+  left:-4.5px;
+  top:6px;
+}
+
+#story-page .metrics{
+  display:flex;
+  gap:20px;
+  margin:4px 0;
+  letter-spacing:0.1em;
+}
+
+#story-page .weight{
+  font-size:18px;
+  font-family:'EB Garamond', serif;
+}
+
+#story-page .fat{
+  font-size:16px;
+  color:#c9a8a8;
+}
+
+#story-page .memo{
+  font-size:13px;
+  letter-spacing:0.1em;
+  font-family:'EB Garamond', serif;
+  margin-top:6px;
+}
+
+#story-page .sidebar{
+  width:160px;
+  font-size:13px;
+
+  position:sticky;
+  top:60px;
+
+  margin-left:40px;
+  padding-top:10px;
+
+  background:;
+}
+
+#story-page .sidebar h3{
+  font-size:14px;
+  letter-spacing:0.1em;
+  margin-bottom:6px;
+  padding:0 4px;
+
+  display:inline-block;
+
+  background:linear-gradient(
+    transparent 60%,
+    #f3dede 60%
+  );
+}
+
+#story-page .sidebar ul{
+  list-style:none;
+  padding:0;
+  margin:0;
+}
+
+#story-page .sidebar li{
+  margin-bottom:6px;
+}
+
+.heart{
+  color:#cdb3b3;
+  margin-right:6px;
+  font-size:16px;
+  position:relative;
+  top:2px;
+}
+
+#wish-page .heart{
+  margin-right:15px;
+  position:relative;
+  top:2px;
+}
+
+.icon{
+  margin-right:12px;
+  color:#d8c7c7;
+  font-size:12px;
+}
+
+.title-icon{
+  width:26px;
+  height:auto;
+  position:relative;
+  top:5px;
+  margin-right:10px;
+}
+
+.arrow{
+  margin-right:8px;
+  color:#d8c7c7;
+  font-size:12px;
+}
+
+.goal-number{
+  font-size:16px;
+  font-family:'EB Garamond', serif;
+  letter-spacing:0.1em;
+  opacity:0.8;
+}
+
+::-webkit-scrollbar{
+  width:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:#f3e3e0;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#d8bcbc;
+  border-radius:10px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+  background:#c9a9a9;
+}
+
+.site-title{
+  position:fixed;
+  right:430px;
+  top:470px;
+
+  font-family:'Sacramento', serif;
+  font-size:22px;
+  color:#7a5c5c;
+  letter-spacing:0.2em;
+  opacity:0.8;
+}
+
+#top-page h3,
+#top-page h4,
+#top-page p{
+  text-align:left;
+  margin-left:60px;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:24px;
+
+  width:fit-content;
+  margin:0 auto;
+}
+
+.card{
+  text-align:center;
+}
+
+.card img{
+  width:220px;
+  background:rgba(255,255,255,0.55);
+  padding:6px;
+  border-radius:6px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* タイトル */
+.design-title{
+  margin-top:10px;
+  margin-bottom:0;
+  font-family:'EB Garamond', serif;
+  font-size:14px;
+  letter-spacing:0.08em;
+}
+
+/* 日付 */
+.design-date{
+  font-family:'Cinzel', serif;
+  font-size:12px;
+  opacity:0.6;
+  letter-spacing:0.1em;
+}
+
+#overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+#overlay img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
+}
+
+@media screen and (max-width:700px){
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  overflow:auto;
+
+  background-image:url("20150326100012.jpg");
+  background-attachment:fixed;
+  background-repeat:no-repeat;
+}
+
+/* フレームを普通の箱にする */
+.wrapper{
+  height:auto;
+  padding-top:0;
+  padding-bottom:60px;
+}
+
+.frame{
+  width:85%;
+  height:auto;
+  padding:40px 20px 0 20px;
+
+  overflow-y:auto;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08)
+}
+
+#top-page h3,
+#top-page h4,
+#top-page p{
+  margin-left:0;
+  text-align:left;
+}
+
+.top-content h3{
+  font-family:'Sacramento', cursive;
+  font-size:14px;
+}
+
+.top-content p{
+  font-size:12px;
+}
+
+/* タイトル */
+#page-title{
+  display:none;
+}
+
+/* メニュー */
+.tabs{
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:6px;
+  margin-bottom:20px;
+}
+
+/* メニューサイズ */
+.tab{
+  font-family:'Sacramento', serif;
+
+  font-size:16px;
+  padding:8px 4px 0;
+}
+
+.tab.active::before{
+  content:"";
+  position:absolute;
+
+  top:6px;   /* 上に移動 */
+  left:6px;  /* 左に移動 */
+
+  width:16px;
+  height:16px;
+
+  background-image:url("20101220084211.gif");
+  background-size:contain;
+  background-repeat:no-repeat;
+
+  transform:rotate(-40deg);
+}
+
+.tab::after{
+  display:none;
+}
+
+.list{
+  width:100%;
+}
+
+/* diary縦 */
+.diary{
+  width:100%;
+}
+
+.diary-content{
+  flex-direction:column;
+}
+
+.diary img{
+  width:100%;
+}
+
+/* story縦 */
+#story-page.active{
+  flex-direction:column;
+}
+
+#story-page .sidebar{
+  position:static;
+  margin:0 0 20px 30px;
+}
+
+#story-page .timeline{
+  width:100%;
+}
+
+/* gallery */
+.gallery{
+  grid-template-columns:1fr;
+}
+
+.card img{
+  width:100%;
+}
+
+/* 右下タイトル消す */
+.site-title{
+  position:static;
+  text-align:center;
+
+  font-family:'Sacramento', serif;
+  font-size:34px;
+
+  margin-top:70px;
+  margin-bottom:20px;
+}
+
+#page-title{
+  display:none;
+}
+
+.link-list{
+  margin-left:0;
+  text-align:left;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="site-title">Dear Lily,</div>
+
+<div class="wrapper">
+  <div class="frame">
+
+   <h1 id="page-title">A Letter to Myself</h1>
+
+<div class="tabs">
+  <button class="tab active" onclick="showPage('top',this)">Prologue</button>
+  <button class="tab" onclick="showPage('diary',this)">Diary</button>
+  <button class="tab" onclick="showPage('wish', this)">Petals</button>
+  <button class="tab" onclick="showPage('story',this)">Story</button>
+  <button class="tab" onclick="showPage('letters',this)">Letters</button>
+</div> <!-- tabs -->
+
+<div id="top-page" class="page active">
+  <div class="top-content">
+    <img src="201510231145341.gif" alt="" class="top-image">
+
+<h2><img src="2015102311112414.gif" alt="" class="diary-icon"></h2>
+
+<h3><img src="201510231145368.gif" alt="" class="title-icon">Dear Lily,</h3>
+<p><span class="arrow">▶</span>自分を大切にするための日記</p>
+
+<h3><img src="2015102311292612.gif" alt="" class="title-icon">Murmur</h3>
+<p>yu｜1989｜156cm｜Goal ⇢ 53.0kg</p>
+
+<h3><img src="2015102311292616.gif" alt="" class="title-icon">Link</h3>
+<h4>素材お借りしています<span class="heart"> ♡</span></h4>
+<ul class="link-list">
+<li>fall asleep</li>
+<li>weekend chewing gum</li>
+</ul>
+
+  </div> <!-- top-content -->
+</div> <!-- top-page -->
+
+<div id="diary-page" class="page">
+
+   <div class="diary-list">
+
+    <div class="diary">
+     <h2><span class="heart">♥</span>2026.03.01 (Sun)</h2>
+
+     <div class="diary-content">
+     <img src="DSC00128.jpg" alt="">
+
+     <div class="text">
+      <p>今日から3月。</p>
+      <p>ダイエットを頑張る。</p>
+      <p>ふわ～。🫠</p>
+     </div> <!-- text -->
+     </div> <!-- diary-content -->
+
+    </div> <!-- diary -->
+
+    <div class="diary">
+     <h2><span class="heart">♥</span>2026.03.02 (Mon)</h2>
+
+     <div class="diary-content">
+     <img src="DSC00128.jpg" alt="">
+
+     <div class="text">
+      <p>デジカメに残っていた2013年の桜。</p>
+      <p>父か母が撮ったもの。</p>
+      <p>また悲しくなってきた（笑）</p>
+     </div>
+     </div>
+
+    </div>
+
+    <div class="diary">
+     <h2><span class="heart">♥</span>2026.03.01 (Sun)</h2>
+
+     <div class="diary-content">
+     <img src="20210722_105814(1).jpg" alt="">
+
+     <div class="text">
+      <p>金曜日に写真を選んでて…これを見つけた。</p>
+      <p>よくトイレにいたな。</p>
+      <p>今日から3月。</p>
+     </div>
+     </div>
+
+    </div>
+
+   </div> <!-- diary-list -->
+
+</div> <!-- diary-page -->
+
+<div id="wish-page" class="page">
+  <div class="list">
+
+  <h2><img src="20101220082300.gif" alt=""> <img src="20100625022801.gif" alt=""></h2>
+
+    <ul>
+      <li class="kana"><span>あ</span></li>
+      <li><span class="heart">♡</span>温かい飲み物</li>
+      <li><span class="heart">♡</span>うさぎのしっぽ</li>
+
+      <li class="kana"><span>か</span></li>
+      <li><span class="heart">♡</span>ガラスのティーカップ</li>
+      <li><span class="heart">♡</span>きれいな自爪</li>
+
+      <li class="kana"><span>さ</span></li>
+      
+
+      <li class="kana"><span>た</span></li>
+      <li><span class="heart">♡</span>丁寧なスキンケア</li>
+
+      <li class="kana"><span>な</span></li>
+      
+
+      <li class="kana"><span>は</span></li>
+      <li><span class="heart">♥</span>皮膚科に通う</li>
+
+      <li class="kana"><span>ま</span></li>
+      
+
+      <li class="kana"><span>や</span></li>
+      <li><span class="heart">♡</span>ゆっくり食べる</li>
+
+      <li class="kana"><span>ら</span></li>
+      
+
+      <li class="kana"><span>わ</span></li>
+      
+    </ul>
+  </div> <!-- list -->
+</div> <!-- wish-page -->
+
+<div id="story-page" class="page">
+
+<div class="sidebar">
+  <h3>March Goal</h3>
+  <p class="goal-number">
+  <span class="arrow">▶</span> 59.9kg
+  </p>
+
+  <h3>Keep in mind</h3>
+  <ul>
+    <li><span class="icon">□</span>ゆっくり食べる</li>
+    <li><span class="icon">□</span>温かい飲み物</li>
+    <li><span class="icon">□</span>夜は炭水化物控えめ</li>
+  </ul>
+</div> <!-- sidebar -->
+
+  <div class="timeline">
+
+    <div class="story">
+      <h2>2026.03.03</h2>
+      <div class="metrics">
+      <p class="weight">52.4 kg</p>
+      <p class="fat">23.8 %</p>
+      </div> <!-- metrics -->
+      <p class="memo">夜は炭水化物控えめ</p>
+    </div> <!-- story -->
+
+    <div class="story">
+      <h2>2026.03.02</h2>
+      <div class="metrics">
+      <p class="weight">52.6 kg</p>
+      <p class="fat">23.8 %</p>
+      </div> <!-- metrics -->
+      <p class="memo">プランク5分</p>
+    </div> <!-- story -->
+
+    <div class="story">
+      <h2>2026.03.01</h2>
+      <div class="metrics">
+      <p class="weight">52.8 kg</p>
+      <p class="fat">23.8 %</p>
+      </div> <!-- metrics -->
+      <p class="memo">少しむくみあり</p>
+    </div> <!-- story -->
+
+  </div> <!-- timeline -->
+
+</div> <!-- story-page -->
+
+<div id="letters-page" class="page">
+
+  <div class="gallery">
+
+    <div class="card">
+    <img src="top.png" class="zoom-img" alt="">
+    <p class="design-title">Sweet Afternoon</p>
+    <p class="design-date">2026.03.07～</p>
+    </div> <!-- card -->
+
+  </div> <!-- gallery -->
+
+</div> <!-- letters-page -->
+
+  </div> <!-- frame -->
+</div> <!-- wrapper -->
+
+<script>
+document.querySelectorAll('.zoom-img').forEach(img => {
+  img.addEventListener("click", function(e){
+    const overlay = document.getElementById("overlay");
+    const overlayImg = document.getElementById("overlay-img");
+
+    overlay.style.display = "flex";
+    overlayImg.src = this.src;
+
+    e.stopPropagation(); // ←これ重要
+  });
+});
+
+document.getElementById("overlay").addEventListener("click", function(){
+  this.style.display = "none";
+});
+
+function showPage(page, el){
+
+  // ページ表示切替
+  document.querySelectorAll('.page')
+    .forEach(p => p.classList.remove('active'));
+
+  document.getElementById(page + '-page')
+    .classList.add('active');
+
+  // タブの見た目
+  document.querySelectorAll('.tab')
+    .forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+
+  // タイトル変更
+  const titles = {
+    top: "A Letter to Myself",
+    diary: "Daily Notes",
+    wish: "Quiet Notes",
+    story: "Diet Log",
+    letters: "Loose Pages"
+  };
+
+  document.getElementById('page-title').textContent = titles[page];
+}
+</script>
+
+<div id="overlay">
+  <img id="overlay-img">
+</div>
+
+</body>
+</html>
